@@ -1,0 +1,44 @@
+name: ${project.name}
+main: com.jrtc27.invblock.InvBlockPlugin
+version: ${plugin.yml.version}
+author: James Clarke (jrtc27)
+website: http://dev.bukkit.org/server-mods/invblock/
+description: Restricts inventory usage for certain players.
+permissions:
+    invblock.*:
+        default: op
+        description: Disables all restrictions, and allows a user to receive InvBlock admin notifications.
+        children:
+            invblock.pickup: false
+            invblock.drop: false
+            invblock.move-items: false
+            invblock.respawn: false
+            invblock.clear: false
+            invblock.notify: true
+    invblock.pickup:
+        default: not op
+        description: Stops a player from being able to pick up items.
+    invblock.drop:
+        default: not op
+        description: Stops a player from being able to drop items.
+    invblock.move-items:
+        default: not op
+        description: Stops a player from being able to move items around in their inventory.
+    invblock.respawn:
+        default: not op
+        description: Causes a player to respawn whenever they disconnect/join.
+    invblock.clear-armor:
+        default: not op
+        description: Causes a player's armor to be removed whenever they disconnect/join.
+    invblock.clear-items:
+        default: not op
+        description: Causes a player's items to be removed whenever they disconnect/join.
+    invblock.clear:
+        default: not op
+        description: Causes a player's entire inventory to be cleared whenever they disconnect/join.
+        children:
+            invblock.clear-items: true
+            invblock.clear-armor: true
+    invblock.notify:
+        default: op
+        description: Allows a user to receive InvBlock admin notifications.
