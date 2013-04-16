@@ -1,0 +1,5 @@
+# InvBlock Config
+#
+# check-updates: Whether InvBlock should notify you about newer versions
+#
+check-updates: true

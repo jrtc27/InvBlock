@@ -23,6 +23,7 @@ import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -33,11 +34,13 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import com.jrtc27.invblock.config.ConfigHandler;
 import com.jrtc27.invblock.listeners.PlayerListener;
 
 public class InvBlockPlugin extends JavaPlugin {
 	public String adminMessage = null;
 	public final PlayerListener playerListener = new PlayerListener(this);
+	public final ConfigHandler configHandler = new ConfigHandler(this);
 
 	private Logger logger;
 	private PluginDescriptionFile pdf;
@@ -51,6 +54,7 @@ public class InvBlockPlugin extends JavaPlugin {
 		this.loadVersionInfo();
 		this.logger = this.getLogger();
 		this.pdf = this.getDescription();
+		this.configHandler.load();
 		this.setupTimers();
 		this.getServer().getPluginManager().registerEvents(this.playerListener, this);
 		this.playerListener.load();
@@ -71,21 +75,24 @@ public class InvBlockPlugin extends JavaPlugin {
 
 	private void setupTimers() {
 		this.cancelTimers();
+
 		if (this.version == null || this.version.equalsIgnoreCase("${project.version}")) {
 			this.logSevere("Error reading version info file!");
 			this.adminMessage = null;
-		} else if (this.version.endsWith("-SNAPSHOT")) {
-			this.logWarning("You are currently running a snapshot version - please be aware that there may be (serious) bugs!");
-			this.adminMessage = null;
-		} else if (this.checkForUpdates) {
-			this.updateCheckTask = this.getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
-				@Override
-				public void run() {
-					checkForUpdates();
-				}
-			}, 20, 432000); // 20 ticks * 60 seconds * 60 minutes * 6 hours => 6 hours in ticks
 		} else {
-			this.logInfo("Update checking has been disabled!");
+			if (this.version.endsWith("-SNAPSHOT")) {
+				this.logWarning("You are currently running a snapshot version - please be aware that there may be (serious) bugs!");
+			}
+			if (this.checkForUpdates) {
+				this.updateCheckTask = this.getServer().getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
+					@Override
+					public void run() {
+						checkForUpdates();
+					}
+				}, 20, 432000); // 20 ticks * 60 seconds * 60 minutes * 6 hours => 6 hours in ticks
+			} else {
+				this.logInfo("Update checking has been disabled!");
+			}
 		}
 	}
 
@@ -162,7 +169,7 @@ public class InvBlockPlugin extends JavaPlugin {
 				if (this.isVersionNewer(this.version, version)) {
 					final String message = "A new recommended version (" + version + ") is available - please update for new features and fixes!";
 					this.logInfo(message);
-					final String playerMessage = "[InvBlock] " + message;
+					final String playerMessage = ChatColor.YELLOW + "[" + this.pdf.getName() + "] " + message;
 					this.broadcastAdminMessage(playerMessage, false);
 					this.adminMessage = playerMessage;
 				} else {
@@ -185,7 +192,11 @@ public class InvBlockPlugin extends JavaPlugin {
 	}
 
 	private boolean isVersionNewer(final String current, final String reported) {
-		final String[] currentElements = current.split("\\.");
+		int snapshotIndex = current.lastIndexOf("-SNAPSHOT");
+		boolean isSnapshot = false;
+		if (snapshotIndex < 0) snapshotIndex = current.length();
+		else isSnapshot = true;
+		final String[] currentElements = current.substring(0, snapshotIndex).split("\\.");
 		final String[] reportedElements = reported.split("\\.");
 		final int length = Math.min(currentElements.length, reportedElements.length);
 		for (int i = 0; i < length; i++) {
@@ -199,6 +210,10 @@ public class InvBlockPlugin extends JavaPlugin {
 			if (reportedInt > currentInt) return true;
 			else if (reportedInt < currentInt) return false;
 		}
-		return reportedElements.length > currentElements.length;
+		if (isSnapshot) {
+			return reportedElements.length >= currentElements.length;
+		} else {
+			return reportedElements.length > currentElements.length;
+		}
 	}
 }
