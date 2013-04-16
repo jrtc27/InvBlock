@@ -42,14 +42,14 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
-		event.setCancelled(event.getPlayer().hasPermission(IBPermission.PICKUP.node()));
+		event.setCancelled(IBPermission.PICKUP.has(event.getPlayer()));
 	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerDropItem(final PlayerDropItemEvent event) {
 		// Will only be called when the player uses their drop key, as clicking outside of an inventory
 		// is already cancelled below when necessary.
-		event.setCancelled(event.getPlayer().hasPermission(IBPermission.DROP.node()));
+		event.setCancelled(IBPermission.DROP.has(event.getPlayer()));
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -58,14 +58,13 @@ public class PlayerListener implements Listener {
 
 		final boolean cancelEvent;
 		if (event.getSlotType() == SlotType.OUTSIDE || event.getRawSlot() == -999) { // Use magic number because of BUKKIT-2768
-			cancelEvent = human.hasPermission(IBPermission.DROP.node());
+			cancelEvent = IBPermission.DROP.has(human);
 		} else {
-			cancelEvent = human.hasPermission(IBPermission.MOVE_ITEMS.node());
+			cancelEvent = IBPermission.MOVE_ITEMS.has(human);
 		}
 
 		if (cancelEvent) {
 			event.setCancelled(true);
-			this.plugin.logInfo("Cancelled click");
 
 			if (human instanceof Player) {
 				((Player) human).updateInventory(); // Deprecated but necessary
@@ -76,13 +75,13 @@ public class PlayerListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final Player player = event.getPlayer();
-		if (player.hasPermission(IBPermission.CLEAR_ITEMS.node())) {
+		if (IBPermission.CLEAR_ITEMS.has(player)) {
 			player.getInventory().clear();
 		}
-		if (player.hasPermission(IBPermission.CLEAR_ARMOR.node())) {
+		if (IBPermission.CLEAR_ARMOR.has(player)) {
 			player.getInventory().setArmorContents(null);
 		}
-		if (player.hasPermission(IBPermission.RESPAWN.node())) {
+		if (IBPermission.RESPAWN.has(player)) {
 			player.teleport(this.plugin.getSpawn(), TeleportCause.PLUGIN);
 		}
 	}
@@ -90,13 +89,13 @@ public class PlayerListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerQuit(final PlayerQuitEvent event) {
 		final Player player = event.getPlayer();
-		if (player.hasPermission(IBPermission.CLEAR_ITEMS.node())) {
+		if (IBPermission.CLEAR_ITEMS.has(player)) {
 			player.getInventory().clear();
 		}
-		if (player.hasPermission(IBPermission.CLEAR_ARMOR.node())) {
+		if (IBPermission.CLEAR_ARMOR.has(player)) {
 			player.getInventory().setArmorContents(null);
 		}
-		if (player.hasPermission(IBPermission.RESPAWN.node())) {
+		if (IBPermission.RESPAWN.has(player)) {
 			player.teleport(this.plugin.getSpawn(), TeleportCause.PLUGIN);
 		}
 	}

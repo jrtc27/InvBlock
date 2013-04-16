@@ -55,6 +55,7 @@ public class InvBlockPlugin extends JavaPlugin {
 		this.logger = this.getLogger();
 		this.pdf = this.getDescription();
 		this.configHandler.load();
+		IBPermission.setPlugin(this);
 		this.setupTimers();
 		this.getServer().getPluginManager().registerEvents(this.playerListener, this);
 		this.playerListener.load();

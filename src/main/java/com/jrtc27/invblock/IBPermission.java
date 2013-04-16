@@ -14,6 +14,8 @@
 
 package com.jrtc27.invblock;
 
+import org.bukkit.entity.HumanEntity;
+
 public enum IBPermission {
 	PICKUP,
 	DROP,
@@ -22,6 +24,12 @@ public enum IBPermission {
 	CLEAR_ITEMS,
 	CLEAR_ARMOR,
 	NOTIFY;
+
+	private static InvBlockPlugin plugin;
+
+	public static void setPlugin(final InvBlockPlugin plugin) {
+		IBPermission.plugin = plugin;
+	}
 
 	private final String name;
 
@@ -35,5 +43,13 @@ public enum IBPermission {
 
 	public String node() {
 		return "invblock." + this.name;
+	}
+
+	public boolean has(final HumanEntity humanEntity) {
+		if (IBPermission.plugin.configHandler.appliesToWorld(humanEntity.getWorld().getName())) {
+			return humanEntity.hasPermission(this.node());
+		} else {
+			return false;
+		}
 	}
 }

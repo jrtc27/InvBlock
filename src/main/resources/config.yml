@@ -2,4 +2,12 @@
 #
 # check-updates: Whether InvBlock should notify you about newer versions
 #
+# mode: One of:
+#       - whitelist - blocking only occurs in the given worlds (default)
+#       - blacklist - blocking occurs in all worlds except those given
+#
+# worlds: A list of either whitelisted or blacklisted worlds
+#
 check-updates: true
+mode: whitelist
+worlds: [ 'pvp', 'world_no_inv' ]
