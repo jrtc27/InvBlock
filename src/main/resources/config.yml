@@ -1,13 +1,22 @@
 # InvBlock Config
-#
+# #
 # check-updates: Whether InvBlock should notify you about newer versions
-#
-# mode: One of:
+# #
+# inv-mode: One of:
 #       - whitelist - blocking only occurs in the given worlds (default)
 #       - blacklist - blocking occurs in all worlds except those given
-#
-# worlds: A list of either whitelisted or blacklisted worlds
-#
+# #
+# inv-worlds: A list of either whitelisted or blacklisted worlds for inventory use/clearing
+# #
+# spawn-mode: One of:
+#       - whitelist - respawning only occurs in the given worlds (default)
+#       - blacklist - respawning occurs in all worlds except those given
+# #
+# spawn-worlds: A list of either whitelisted or blacklisted worlds for respawning
+# #
 check-updates: true
-mode: whitelist
-worlds: [ 'pvp', 'world_no_inv' ]
+inv-mode: whitelist
+inv-worlds: [ 'pvp', 'world_no_inv' ]
+spawn-mode: whitelist
+spawn-worlds: [ 'pvp', 'world_respawn_on_relog' ]
+configVersionDoNotTouch: 2

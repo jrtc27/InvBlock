@@ -46,10 +46,25 @@ public enum IBPermission {
 	}
 
 	public boolean has(final HumanEntity humanEntity) {
-		if (IBPermission.plugin.configHandler.appliesToWorld(humanEntity.getWorld().getName())) {
-			return humanEntity.hasPermission(this.node());
-		} else {
-			return false;
+		switch (this) {
+			case PICKUP:
+			case DROP:
+			case MOVE_ITEMS:
+			case CLEAR_ITEMS:
+			case CLEAR_ARMOR:
+				if (IBPermission.plugin.configHandler.inventoryAppliesToWorld(humanEntity.getWorld().getName())) {
+					return humanEntity.hasPermission(this.node());
+				}
+				return false;
+			case RESPAWN:
+				if (IBPermission.plugin.configHandler.respawnAppliesToWorld(humanEntity.getWorld().getName())) {
+					return humanEntity.hasPermission(this.node());
+				}
+				return false;
+			case NOTIFY:
+			default:
+				IBPermission.plugin.logSevere(this.getClass().getCanonicalName() + ".has(HumanEntity) does not apply to " + this.name());
+				return false;
 		}
 	}
 }
