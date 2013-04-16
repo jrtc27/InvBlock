@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jrtc27</groupId>
     <artifactId>InvBlock</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3</version>
     <name>InvBlock</name>
     <prerequisites>
         <maven>3.0</maven>
@@ -34,7 +34,7 @@
         <connection>scm:git:git://github.com/jrtc27/InvBlock.git</connection>
         <url>https://github.com/jrtc27/InvBlock</url>
         <developerConnection>scm:git:git@github.com:jrtc27/InvBlock.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>0.3</tag>
     </scm>
 
     <ciManagement>
