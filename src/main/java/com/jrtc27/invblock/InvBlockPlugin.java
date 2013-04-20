@@ -35,12 +35,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.jrtc27.invblock.config.ConfigHandler;
+import com.jrtc27.invblock.hooks.HooksManager;
 import com.jrtc27.invblock.listeners.PlayerListener;
 
 public class InvBlockPlugin extends JavaPlugin {
 	public String adminMessage = null;
 	public final PlayerListener playerListener = new PlayerListener(this);
 	public final ConfigHandler configHandler = new ConfigHandler(this);
+	public HooksManager hooksManager;
 
 	private Logger logger;
 	private PluginDescriptionFile pdf;
@@ -54,6 +56,7 @@ public class InvBlockPlugin extends JavaPlugin {
 		this.loadVersionInfo();
 		this.logger = this.getLogger();
 		this.pdf = this.getDescription();
+		this.hooksManager = new HooksManager(this);
 		this.configHandler.load();
 		IBPermission.setPlugin(this);
 		this.setupTimers();
@@ -150,7 +153,10 @@ public class InvBlockPlugin extends JavaPlugin {
 		}
 	}
 
-	public Location getSpawn() {
+	public Location getSpawn(final Player player) {
+		final Location essentialsSpawnLoc = this.hooksManager.essentialsSpawn.getSpawn(player);
+		if (essentialsSpawnLoc != null) return essentialsSpawnLoc;
+
 		for (final World world : this.getServer().getWorlds()) {
 			if (world.getEnvironment() == Environment.NORMAL) return world.getSpawnLocation();
 		}

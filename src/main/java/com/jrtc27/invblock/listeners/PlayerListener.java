@@ -82,7 +82,7 @@ public class PlayerListener implements Listener {
 			player.getInventory().setArmorContents(null);
 		}
 		if (IBPermission.RESPAWN.has(player)) {
-			player.teleport(this.plugin.getSpawn(), TeleportCause.PLUGIN);
+			player.teleport(this.plugin.getSpawn(player), TeleportCause.PLUGIN);
 		}
 	}
 
@@ -96,7 +96,7 @@ public class PlayerListener implements Listener {
 			player.getInventory().setArmorContents(null);
 		}
 		if (IBPermission.RESPAWN.has(player)) {
-			player.teleport(this.plugin.getSpawn(), TeleportCause.PLUGIN);
+			player.teleport(this.plugin.getSpawn(player), TeleportCause.PLUGIN);
 		}
 	}
 }

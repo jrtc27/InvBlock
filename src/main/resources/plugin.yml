@@ -4,6 +4,7 @@ version: ${plugin.yml.version}
 author: James Clarke (jrtc27)
 website: http://dev.bukkit.org/server-mods/invblock/
 description: Restricts inventory usage for certain players.
+softdepend: [Essentials, EssentialsSpawn]
 permissions:
     invblock.*:
         default: op
